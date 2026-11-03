@@ -1,0 +1,79 @@
+---
+title: "prac1_exercises"
+editor: visual
+---
+rounding pi to 0 and 2 dp
+
+```{r}
+library(tidyverse)
+library(gt)
+```
+
+```{r}
+round(3.14159)
+round(3.14159, digits= 2)
+```
+Argument order
+```{r}
+print(rep(5, 7))
+print(rep(x = 5, times = 7))
+```
+Answer to Exercise - Assigning values to variables: 5
+```
+Character, numerical and logical variables
+```
+```{r}
+character <- "abcdef"
+number <- 12
+logical <- TRUE
+print(paste(character, number, logical))
+print(class(character))
+print(class(number))
+print(class(logical))
+```
+Using variables of different types
+```
+```{r}
+cell_ID_1 <- "CX1"
+cell_ID_2 <- "CX2"
+
+treated_1 <- TRUE
+treated_2 <- FALSE
+
+num_cells_before_1 <- 5415
+num_cells_before_2 <- 8123
+
+num_cells_after_1 <- 1432
+num_cells_after_2 <- 7543
+
+```
+Vectors
+```{r}
+cell_ID <- c(cell_ID_1, cell_ID_2)
+treated <- c(treated_1, treated_2)
+num_cells_before <- c(num_cells_before_1, num_cells_before_2)
+num_cells_after <- c(num_cells_after_1, num_cells_after_2)
+```
+Indexing
+```
+```{r}
+all_my_pets <- c("dog", "horse", "guinea pig", "chicken", "cat")
+my_fourth_pet <- all_my_pets[4]
+print(my_fourth_pet)
+```
+Creating a data frame
+
+```{r}
+my_data_frame <- tibble(
+  fruit = c("apple", "pear", "banana"),
+  length = c(22, 30, 55),
+  weight = c(150, 165, 170)
+)
+
+
+print(my_data_frame)
+```
+
+
+
+
