@@ -73,7 +73,31 @@ my_data_frame <- tibble(
 
 print(my_data_frame)
 ```
+```{r}
+my_data_frame <- tibble(
+  fruit = c("apple", "pear", "banana"),
+  length = c(22, 30, 55),
+  weight = c(150, 165, 170)
+)
 
+gt(my_data_frame)
+```
 
+```{r}
+radiation_data_frame <- tibble(
+  cell_ID = c("CX1", "CX2"),
+  treated = c("TRUE", "FALSE"),
+  num_cells_before = c(5415, 8123),
+  num_cells_after = c(1432, 7543)
+)
+
+gt(radiation_data_frame)
+```
+
+Reading CSV files
+
+```{r}
+weather <- read_csv("data/weather_data.csv")
+```
 
 
