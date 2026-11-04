@@ -99,5 +99,36 @@ Reading CSV files
 ```{r}
 weather <- read_csv("data/weather_data.csv")
 ```
+Plotting weather data
+```{r}
+#read table
+weather <- read_csv("data/weather_data.csv")
+
+#intiate blank plot
+ggplot(weather)
+
+#adding axes
+ggplot(weather, aes(
+  x = observation_time,
+  y = temperature_c
+))
+
+#adding data
+ggplot(weather, aes(
+  x = observation_time,
+  y = temperature_c
+)) +
+  geom_line()
+#add extra features
+# colour => change colour of line, xlab(), ylab() => label x and y axis, gg(title), add title
+ggplot(weather, aes(
+  x = observation_time,
+  y = temperature_c
+)) +
+  geom_line(colour = "red") +
+  xlab("Date") +
+  ylab("Temp (C)") +
+  ggtitle("Temperature by Date")
+```
 
 

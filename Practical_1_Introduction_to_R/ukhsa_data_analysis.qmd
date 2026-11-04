@@ -1,0 +1,73 @@
+---
+title: "ukhsa_data_analysis"
+author: "Trang To"
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(gt)
+```
+Influenza data, 2021-2026, retrieved from UKHSA
+
+```{r}
+influenza <- read_csv("data/ukhsa-chart-download-flu.csv")
+
+gt(head(influenza))
+
+```
+
+Plotting HSA influenza data
+```{r}
+influenza <- read_csv("data/ukhsa-chart-download-flu.csv")
+ggplot(influenza, aes(
+  x = date,
+  y = metric_value
+)) +
+  geom_line(colour = "cadetblue1") +
+  xlab("Date") +
+  ylab("Percentage") +
+  ggtitle("Percentage of positive test results for influenza")
+  
+```
+
+
+
+
+Download data via an API
+```{r}
+library("httr2")
+```
+```{r}
+url <- "https://api.ukhsa-dashboard.data.gov.uk/themes/infectious_disease/sub_themes/vector_borne/topics/lyme/geography_types/Nation/geographies/England/metrics/lyme_cases_infectionRateByYear"
+url <- paste0(url, "?page_size=365")
+print(url)
+```
+```{r}
+#set up request
+api_request <- request(url)
+#perform request
+response <- req_perform(api_request)
+
+#convert to JSON
+json_response <- resp_body_json(response)
+str(json_response, max.level = 1)
+
+#Convert to dataframe
+results_df <- bind_rows(json_response$results)
+gt(head(results_df))
+```
+```{r}
+print(unique(pull(results_df, stratum)))
+print(unique(pull(results_df, age)))
+print(unique(pull(results_df, sex)))
+
+```
+Filtering to select a single data series
+```{r}
+filt <- filter(results_df, stratum == "default")
+filt <- filter(results_df, age == "all")
+filt <- filter (results_df, sex == "all")
+gt(filt)
+```
+
