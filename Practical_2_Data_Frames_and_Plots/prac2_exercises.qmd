@@ -1,0 +1,127 @@
+---
+title: "Prac 2 exercises, general practice exercises"
+author: "Trang To"
+editor: visual
+---
+Innate factors and ontogeny determine nonbreeding areas of migrant songbirds
+
+Axes labels
+x - Longitude
+y - Latitude
+
+Line colours show the locations of the breeding populations.
+
+Orange - Spain
+Purple - Norway
+Blue - Sweden
+Pink - Britain
+Red - Netherlands
+Turquoise - western Russia
+Green - Ural
+Dark green - Siberia
+
+Shapes show the type of site:
+
+Circles - breeding site
+Squares - non-breeding area (this is the winter location)
+Filled upward triangles - autumn post-Saharan stopover location
+Filled downward triangles - spring Iberian stopover location
+Open downward triangles - spring westernmost location
+
+
+Pipe symbol
+```{r}
+my_numbers <- c(2, 4, 6, 8)
+
+sum(my_numbers)
+```
+```{r}
+#Pipe passes the value on its left into the function on its right
+my_numbers <- c(2, 4, 6, 8)
+
+my_numbers |> sum()
+
+my_numbers <- c(2, 4, 6, 8)
+
+print(my_numbers |>
+  sum() |>
+  sqrt())
+```
+```{r}
+#Steps can be added indefinitely
+my_numbers <- c(2, 4, 6, 8)
+
+print(my_numbers |>
+  sum() |>
+  sqrt() |>
+  round())
+```
+```{r}
+my_numbers <- c(2, 4, 6, 8)
+
+my_result <- my_numbers |>
+  sum() |>
+  sqrt() |>
+  round()
+
+print(my_result)
+```
+```{r}
+input_vec <- c(5, -10, 4, -3)
+
+result <- input_vec |>
+  mean()|>
+  abs() |>
+  round() 
+  
+  print(result)
+
+```
+Comparison operators
+```{r}
+#== means "is equal to?"
+x <- 1
+round(3.123, digits = 1)
+x <- 1
+y <- 2
+print(x == y)
+```
+```{r}
+y <- 12
+print (y == 7)
+print (y <15)
+print (y>20)
+print (y<=12)
+
+```
+Joining data frame
+```{r}
+df_dept <- read_csv("data/depts.csv")
+df_score <- read_csv("data/scores.csv")
+gt(df_dept)
+gt(df_score)
+```
+
+```{r}
+#full join retains all of the rows from both data frames, adding NA where no data is available
+full_join_example <- full_join(df_dept, df_score)
+gt(full_join_example)
+
+```
+
+```{r}
+#inner join only retains rows for individuals which are in both data frame
+inner_join_example <- inner_join(df_dept, df_score)
+gt(inner_join_example)
+```
+```{r}
+#left join retains all rows in the first data frame  and adds data from the second data frame where available, adding NA where it is not.
+left_join_example <- left_join(df_dept, df_score)
+gt(left_join_example)
+```
+```{r}
+#right join retains all the rows in the second data frame and adds data from the first data frame where available, adding NA where it is not.
+right_join_example <- right_join(df_dept, df_score)
+gt(right_join_example)
+```
+

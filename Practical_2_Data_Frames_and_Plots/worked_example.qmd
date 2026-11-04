@@ -1,0 +1,160 @@
+---
+title: "Prac 2 worked examples"
+author: "Trang To"
+editor: visual
+---
+
+```{r}
+library(gt)
+library(tidyverse)
+library(maps)
+```
+```{r}
+#read csv file
+bird_breeding_sites <- read_csv("data/breeding_site_locations.csv")
+gt(bird_breeding_sites)
+```
+Examining file's data 
+```{r}
+#view column names
+colnames(bird_breeding_sites)
+
+#summary of data frame, list of column and elements it is under
+glimpse(bird_breeding_sites)
+
+#see number of rows
+print(nrow(bird_breeding_sites))
+
+#see number of columns
+print(ncol(bird_breeding_sites))
+
+#see number of rows and columns
+print(dim(bird_breeding_sites))
+```
+
+Reading the migration CSV file
+```{r}
+#reading csv file, head = see top 10 rows
+bird_migration_sites <- read_csv("data/migratory_connectivity_dataset.csv")
+gt(head(bird_migration_sites))
+
+```
+```{r}
+glimpse(bird_migration_sites)
+
+#100 rows, 34 columns
+#Tag column has character data type, birth has numeric data type
+
+colnames(bird_migration_sites)
+```
+
+Selecting columns
+```{r}
+bird_breeding_selected <- bird_breeding_sites |>
+  select(Site, Longitude, Latitude)
+
+gt(bird_breeding_selected)
+
+#To not include duplicated rows
+bird_breeding_selected <- bird_breeding_sites |>
+  select(Site, Longitude, Latitude) |>
+  distinct()
+
+gt(bird_breeding_selected)
+```
+
+Filtering and renaming columns
+```{r}
+bird_breeding_selected <- bird_breeding_sites |>
+  select(Site, Longitude, Latitude) |>
+  distinct() |>
+  rename(Breeding_Longitude = Longitude, Breeding_Latitude = Latitude)
+
+gt(bird_breeding_selected)
+```
+
+filtering and renaming for migration data
+```{r}
+bird_migration_selected <- bird_migration_sites |>
+  select(Site, winterLongitude, winterLatitude, pslon, pslat, iblon, iblat, awestlon, awestlat) |>
+distinct() |>
+rename(Winter_Longitude = winterLongitude,
+Winter_Latitude = winterLatitude,
+Stopover_Longitude = pslon,
+Stopover_Latitude = pslat,
+Iberian_Longitude = iblon,
+Iberian_Latitude = iblat,
+Westmost_Longitude = awestlon,
+Westmost_Latitude = awestlat)
+
+gt(bird_migration_selected)
+```
+Filtering data frame
+```{r}
+#breeding sites
+bird_breeding_exc <- bird_breeding_selected |> filter(Site != "Spain")
+
+gt(bird_breeding_exc) 
+
+#migration sites
+bird_migration_exc <- bird_migration_selected |>
+  filter(Site != "Spain")
+
+gt(bird_migration_exc)
+```
+
+Grouping data
+```{r}
+bird_migration_grouped <- bird_migration_exc |> group_by(Site)
+
+#grouped data frame can't really be visualised => use glimpse
+glimpse(bird_migration_grouped)
+```
+```{r}
+#create new data frame, with 1 column that contains maximum value in the Stopover_Latitude for each site
+#na.rm = TRUE => tells R to ignore any rows with "NA"
+lat_df <- bird_migration_grouped |>
+  summarise(Highest_Lat_Stopover = max(Stopover_Latitude, na.rm = TRUE))
+
+gt(lat_df)
+```
+
+```{r}
+lat_df <- bird_migration_grouped |>
+  summarise(
+    Highest_Lat_Stopover = max(Stopover_Latitude, na.rm = TRUE),
+    Lowest_Lat_Stopover = min(Stopover_Latitude, na.rm = TRUE),
+    Mean_Lat_Stopover = mean(Stopover_Latitude, na.rm = TRUE),
+    Highest_Lat_Winter = max(Winter_Latitude, na.rm = TRUE),
+    Lowest_Lat_Winter = min(Winter_Latitude, na.rm = TRUE),
+    Mean_Lat_Winter = mean(Winter_Latitude, na.rm = TRUE)
+  )
+
+gt(lat_df)
+```
+
+Data frame with median values for all latitude and longitude columns
+```{r}
+bird_migration_grouped <- bird_migration_exc |> group_by(Site)
+
+bird_migration_summary <- bird_migration_grouped |>
+  summarise(
+    Stopover_Latitude = median(Stopover_Latitude, na.rm = TRUE),
+    Stopover_Longitude = median(Stopover_Longitude, na.rm = TRUE),
+    Iberian_Latitude = median(Iberian_Latitude, na.rm = TRUE),
+    Iberian_Longitude = median(Iberian_Longitude, na.rm = TRUE),
+    Westmost_Latitude = median(Westmost_Latitude, na.rm = TRUE),
+    Winter_Latitude = median(Winter_Latitude, na.rm = TRUE),
+    Winter_Longitude = median(Winter_Longitude, na.rm = TRUE)
+  )
+
+gt(bird_migration_summary)
+```
+
+Combining data frames
+```{r}
+combined_bird_data <- full_join(bird_breeding_exc, bird_migration_summary)
+
+gt(combined_bird_data)
+```
+
