@@ -28,6 +28,12 @@ Filled upward triangles - autumn post-Saharan stopover location
 Filled downward triangles - spring Iberian stopover location
 Open downward triangles - spring westernmost location
 
+```{r}
+library(gt)
+library(tidyverse)
+library(maps)
+```
+
 
 Pipe symbol
 ```{r}
@@ -123,5 +129,17 @@ gt(left_join_example)
 #right join retains all the rows in the second data frame and adds data from the first data frame where available, adding NA where it is not.
 right_join_example <- right_join(df_dept, df_score)
 gt(right_join_example)
+```
+```{r}
+gt(df_dept)
+```
+```{r}
+#subsetting data frame. Filter allows to filter data out based from a specific column, %in% allows filtering from multiple values
+keep_depts <- c("Maths", "English")
+
+df_eng_maths <- df_dept |>
+  filter(Department %in% keep_depts)
+
+gt(df_eng_maths)
 ```
 

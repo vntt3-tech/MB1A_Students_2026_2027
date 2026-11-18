@@ -157,4 +157,136 @@ combined_bird_data <- full_join(bird_breeding_exc, bird_migration_summary)
 
 gt(combined_bird_data)
 ```
+```{r}
+combined_bird_piv <- combined_bird_data |>
+  pivot_longer(
+    cols = ends_with(c("_Longitude", "_Latitude")),
+    names_sep = "_",
+    names_to = c("Location_Type", ".value")
+  )
+```
+
+Subsetting data frame
+
+```{r}
+
+
+gt(combined_bird_piv)
+```
+```{r}
+spring_vals <- c("Breeding", "Stopover", "Winter")
+autumn_vals <- c("Breeding", "Iberian", "Westmost", "Winter")
+spring_data <- combined_bird_piv |> filter (Location_Type %in% spring_vals)
+autumn_data <- combined_bird_piv |> filter (Location_Type %in% autumn_vals)
+
+gt(spring_data)
+gt(autumn_data)
+```
+
+```{r}
+write_csv(spring_data, "output/birds_spring.csv")
+write_csv(autumn_data, "output/birds_autumn.csv")
+```
+calculating axis limits
+```{r}
+min_lon <- spring_data |>
+  pull(Longitude) |>
+  min()
+
+print(min_lon)
+
+max_lon <- spring_data |>
+  pull(Longitude)|>
+  max()
+
+print(max_lon)
+
+min_lat <- spring_data |> 
+  pull(Latitude)|>
+  min()
+
+print(min_lat)
+
+max_lat <- spring_data |> 
+  pull(Latitude)|>
+  max()
+
+print(max_lat)
+```
+
+Plotting data
+
+```{r}
+ggplot(
+  spring_data,
+  aes(x = Longitude, y = Latitude)) +
+    geom_point()
+```
+```{r}
+ggplot(
+  spring_data,
+  aes(x = Longitude, y = Latitude)
+) +
+  geom_point() +
+  annotation_borders(linewidth = 0.2) +
+  coord_quickmap()
+```
+```{r}
+ggplot(
+  spring_data,
+  aes(x = Longitude, y = Latitude)
+) +
+  geom_point() +
+  annotation_borders(linewidth = 0.2) +
+  coord_quickmap(xlim = c(min_lon - 2, max_lon + 2),
+                 ylim = c(min_lat - 2, max_lat +2)
+  )
+```
+```{r}
+#change colours based on site, change shapes based on location type
+ggplot(
+  spring_data,
+  aes(x = Longitude, y = Latitude, color = Site, shape = Location_Type)
+) +
+  geom_point() +
+  annotation_borders(linewidth = 0.2) +
+  coord_quickmap(xlim = c(min_lon - 2, max_lon + 2),
+                 ylim = c(min_lat - 2, max_lat +2)
+  )
+```
+```{r}
+ggplot(
+  spring_data,
+  aes(x = Longitude, y = Latitude, color = Site, shape = Location_Type)
+) +
+  geom_point(size  = 3) +
+  annotation_borders(linewidth = 0.2) +
+  coord_quickmap(
+    xlim = c(min_lon - 2, max_lon + 2),
+    ylim = c(min_lat - 2, max_lat + 2)
+  ) +
+  ggtitle("Pied Flycatcher Spring Migration Routes") +
+  xlab("Longitude (°)") +
+  ylab("Latitude (°)") +
+  theme_minimal()
+```
+
+```{r}
+#add paths
+ggplot(
+  spring_data,
+  aes(x = Longitude, y = Latitude, color = Site, shape = Location_Type)
+) +
+  geom_point(size = 3) +
+  annotation_borders(linewidth = 0.2) +
+  coord_quickmap(
+    xlim = c(min_lon - 2, max_lon + 2),
+    ylim = c(min_lat - 2, max_lat + 2)
+  ) +
+  geom_path(aes(group = Site)) +
+  ggtitle("Pied Flycatcher Spring Migration Routes") +
+  xlab("Longitude (°)") +
+  ylab("Latitude (°)") +
+  theme_minimal()
+```
 
