@@ -1,0 +1,97 @@
+---
+title: "Practical 3 exercises"
+editor: visual
+---
+
+```{r}
+set.seed(42)
+```
+
+Loops
+```{r}
+for (i in seq_len(20)) {
+  print(i^3)
+}
+```
+```{r}
+for (i in seq_len(5)){
+  print(paste(sample(letters, 5, replace = TRUE), collapse=""))
+}
+```
+Loops in vectors, ascii art
+```{r}
+library(cowsay)
+species <- c("frog", "stegosaurus", "squirrel", "ghost")
+
+for (spp in species) {
+  say(paste("I am a", spp), by = spp)
+}
+```
+```{r}
+cat("A bird leaves west Africa.\n")
+
+for (i in seq_len(25)) {
+  cat("flap ")
+}
+
+cat("The bird arrives in Europe\n")
+cat("6 months later...\n")
+cat("A bird leaves Europe\n")
+
+for (i in seq_len(100)) {
+  cat("flap ")
+}
+cat("\nThe bird arrives in west Africa.")
+```
+```{r}
+cubed_nums <- c()
+
+for (i in seq_len(20)) {
+  res <- i^3
+  cubed_nums <- c(cubed_nums, res)
+}
+
+print(cubed_nums)
+```
+Storing results from loops
+```{r}
+species <- c("monkey", "shark", "turkey", "snowman")
+species_df <- tibble()
+
+for (spp in species) {
+  has_s <- startsWith(spp, "s")
+  current_row <- tibble(
+    Species = spp,
+    Starts_with_S = has_s
+  )
+  species_df <- species_df |> bind_rows(current_row)
+}
+gt(species_df)
+```
+
+
+
+```{r}
+
+library(tidyverse)
+library(gt)
+set.seed(42)
+
+breakfast <- c("eggs", "bacon", "sausages", "toast")
+nums <- seq_len(5)
+breakfast_df <- tibble()
+
+for (i in seq_len(10)){
+ item <- sample(breakfast, size = 1)
+ num <- sample (nums, size = 1)
+ row <-tibble(
+   item = item,
+   count = num
+ )
+breakfast_df <- bind_rows(breakfast_df, row)
+}
+gt(breakfast_df)
+  
+```
+
+
